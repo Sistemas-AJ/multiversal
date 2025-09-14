@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chambeador - Análisis Multivariable</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .container { max-width: 900px; margin: auto; }
+    .section { margin-bottom: 30px; }
+    label { display: block; margin-bottom: 5px; }
+    select, input[type="text"] { width: 100%; margin-bottom: 10px; }
+    button { padding: 10px 20px; margin-top: 10px; }
+    img { max-width: 100%; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Chambeador - Análisis Multivariable</h1>
+    <div class="section">
+      <button id="importBtn">Importar datos</button>
+      <div id="columns"></div>
+    </div>
+    <div class="section">
+      <label for="dependent">Variable dependiente:</label>
+      <select id="dependent"></select>
+      <label for="independent">Variables independientes (separadas por coma):</label>
+      <input type="text" id="independent" placeholder="Ejemplo: edad,ingresos,experiencia">
+      <label for="modelType">Tipo de modelo:</label>
+      <select id="modelType">
+        <option value="regresion_multiple">Regresión múltiple</option>
+        <option value="regresion_logistica">Regresión logística</option>
+        <option value="discriminante">Análisis discriminante</option>
+      </select>
+      <button id="runModelBtn">Ejecutar modelo</button>
+      <div id="modelResult"></div>
+    </div>
+    <div class="section">
+      <label for="plotX">Gráfico X:</label>
+      <select id="plotX"></select>
+      <label for="plotY">Gráfico Y:</label>
+      <select id="plotY"></select>
+      <button id="plotBtn">Generar gráfico</button>
+      <img id="plotImg" src="" alt="Gráfico" />
+    </div>
+  </div>
+  <script>
+    const importBtn = document.getElementById('importBtn');
+    const columnsDiv = document.getElementById('columns');
+    const dependentSelect = document.getElementById('dependent');
+    const independentInput = document.getElementById('independent');
+    const modelTypeSelect = document.getElementById('modelType');
+    const runModelBtn = document.getElementById('runModelBtn');
+    const modelResultDiv = document.getElementById('modelResult');
+    const plotXSelect = document.getElementById('plotX');
+    const plotYSelect = document.getElementById('plotY');
+    const plotBtn = document.getElementById('plotBtn');
+    const plotImg = document.getElementById('plotImg');
+
+    let columns = [];
+
+    importBtn.onclick = async () => {
+      const res = await window.api.importFile();
+      if (!res) return;
+      columns = res.columns;
+      columnsDiv.innerText = 'Columnas: ' + columns.join(', ');
+      dependentSelect.innerHTML = columns.map(c => `<option value="${c}">${c}</option>`).join('');
+      plotXSelect.innerHTML = plotYSelect.innerHTML = dependentSelect.innerHTML;
+      plotYSelect.innerHTML = columns.map(c => `<option value="${c}">${c}</option>`).join('');
+    };
+
+    runModelBtn.onclick = async () => {
+      const dep = dependentSelect.value;
+      const indep = independentInput.value.split(',').map(s => s.trim()).filter(Boolean);
+      const type = modelTypeSelect.value;
+      const res = await window.api.runModel({ dependent: dep, independent: indep, type });
+      if (res.error) {
+        modelResultDiv.innerText = 'Error: ' + res.error;
+      } else {
+        modelResultDiv.innerHTML = `<b>Score:</b> ${res.score}<br><b>Coeficientes:</b> ${res.coef.join(', ')}`;
+      }
+    };
+
+    plotBtn.onclick = async () => {
+      const x = plotXSelect.value;
+      const y = plotYSelect.value;
+      const res = await window.api.plot({ x, y });
+      if (res.image) {
+        plotImg.src = 'data:image/png;base64,' + res.image;
+      }
+    };
+  </script>
+</body>
+</html>

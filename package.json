@@ -1,0 +1,15 @@
+{
+  "name": "chambeador",
+  "version": "1.0.0",
+  "description": "aplicacio para escritorio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ALIXTER",
+  "license": "ISC",
+  "dependencies": {
+    "electro": "^2.1.1",
+    "electron": "^38.1.0"
+  }
+}
