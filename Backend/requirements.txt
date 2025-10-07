@@ -1,4 +1,10 @@
-flask
+pandas
+scikit-learn
+matplotlib
+plotly
+openpyxl
+fastapi
+uvicorn
 pandas
 scikit-learn
 matplotlib

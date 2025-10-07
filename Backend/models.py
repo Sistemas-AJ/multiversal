@@ -1,16 +1,16 @@
-# models.py
-from flask import jsonify
+from fastapi import Request
+from fastapi.responses import JSONResponse
 import pandas as pd
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from utils import get_df
 
-def run_model_logic(request):
+async def run_model_logic(request: Request):
     df = get_df()
     try:
         if df is None:
-            return jsonify({'error': 'Primero debe importar un archivo de datos'}), 400
-        data = request.json
+            return JSONResponse({'error': 'Primero debe importar un archivo de datos'}, status_code=400)
+        data = await request.json()
         dep = data['dependent']
         indep = data['independent']
         model_type = data['type']
@@ -22,15 +22,15 @@ def run_model_logic(request):
         missing_cols = [col for col in [dep] + indep if col not in df.columns]
         if missing_cols:
             proceso.append(f"❌ Columnas no encontradas: {', '.join(missing_cols)}")
-            return jsonify({'error': f'Columnas no encontradas: {', '.join(missing_cols)}', 'proceso': proceso}), 400
+            return JSONResponse({'error': f'Columnas no encontradas: {', '.join(missing_cols)}', 'proceso': proceso}, status_code=400)
         X = df[indep]
         y = df[dep]
         if X.isnull().any().any() or y.isnull().any():
             proceso.append("❌ Hay valores nulos en los datos. Por favor, limpia los datos antes de analizar.")
-            return jsonify({'error': 'Hay valores nulos en los datos.', 'proceso': proceso}), 400
+            return JSONResponse({'error': 'Hay valores nulos en los datos.', 'proceso': proceso}, status_code=400)
         if not all([pd.api.types.is_numeric_dtype(X[c]) for c in X.columns]) or not pd.api.types.is_numeric_dtype(y):
             proceso.append("❌ Las variables deben ser numéricas para el análisis.")
-            return jsonify({'error': 'Las variables deben ser numéricas.', 'proceso': proceso}), 400
+            return JSONResponse({'error': 'Las variables deben ser numéricas.', 'proceso': proceso}, status_code=400)
         if model_type == 'regresion_multiple':
             model = LinearRegression().fit(X, y)
             score = model.score(X, y)
@@ -43,7 +43,7 @@ def run_model_logic(request):
             proceso.append(f"<b>Fórmula con tus datos:</b> <span style='font-family:monospace;'>{formula}</span>")
             proceso.append(f"<b>Interpretación:</b> Por cada unidad que aumenta una variable independiente, Y cambia en su coeficiente respectivo, manteniendo las demás constantes.")
             proceso.append(f"✅ Regresión múltiple ejecutada. Score: {score:.4f}")
-            return jsonify({'score': score, 'coef': coef, 'proceso': proceso})
+            return JSONResponse({'score': score, 'coef': coef, 'proceso': proceso})
         elif model_type == 'regresion_logistica':
             model = LogisticRegression(max_iter=1000).fit(X, y)
             score = model.score(X, y)
@@ -56,7 +56,7 @@ def run_model_logic(request):
             proceso.append(f"<b>Fórmula con tus datos:</b> <span style='font-family:monospace;'>{formula}</span>")
             proceso.append(f"<b>Interpretación:</b> Cada coeficiente representa el cambio en el logit de la probabilidad por unidad de la variable independiente.")
             proceso.append(f"✅ Regresión logística ejecutada. Score: {score:.4f}")
-            return jsonify({'score': score, 'coef': coef, 'proceso': proceso})
+            return JSONResponse({'score': score, 'coef': coef, 'proceso': proceso})
         elif model_type == 'discriminante':
             model = LinearDiscriminantAnalysis().fit(X, y)
             score = model.score(X, y)
@@ -69,10 +69,10 @@ def run_model_logic(request):
             proceso.append(f"<b>Fórmula con tus datos:</b> <span style='font-family:monospace;'>{formula}</span>")
             proceso.append(f"<b>Interpretación:</b> La función D permite clasificar observaciones en grupos según las variables independientes.")
             proceso.append(f"✅ Análisis discriminante ejecutado. Score: {score:.4f}")
-            return jsonify({'score': score, 'coef': coef, 'proceso': proceso})
+            return JSONResponse({'score': score, 'coef': coef, 'proceso': proceso})
         else:
             proceso.append("❌ Modelo no soportado.")
-            return jsonify({'error': 'Modelo no soportado', 'proceso': proceso}), 400
+            return JSONResponse({'error': 'Modelo no soportado', 'proceso': proceso}, status_code=400)
     except Exception as e:
         print(f"❌ Error en análisis: {str(e)}")
-        return jsonify({'error': f'Error en el análisis: {str(e)}'}), 500
+        return JSONResponse({'error': f'Error en el análisis: {str(e)}'}, status_code=500)
