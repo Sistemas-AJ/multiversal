@@ -3,6 +3,7 @@ const path = require('path');
 const axios = require('axios');
 
 let mainWindow;
+let host = 'http://localhost:5000';
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -131,8 +132,8 @@ ipcMain.handle('import-file', async (event) => {
     const FormData = require('form-data');
     const form = new FormData();
     form.append('file', fs.createReadStream(filePath));
-    
-    const res = await axios.post('http://localhost:5000/import', form, {
+
+    const res = await axios.post(`${host}/import`, form, {
       headers: form.getHeaders(),
       timeout: 30000
     });
@@ -152,7 +153,7 @@ ipcMain.handle('import-file', async (event) => {
 // Manejo de ejecución de modelos
 ipcMain.handle('run-model', async (event, params) => {
   try {
-    const res = await axios.post('http://localhost:5000/model', params, {
+    const res = await axios.post(`${host}/model`, params, {
       timeout: 60000 // 60 segundos para análisis complejos
     });
     return res.data;
@@ -165,7 +166,7 @@ ipcMain.handle('run-model', async (event, params) => {
 // Manejo de generación de gráficos
 ipcMain.handle('plot', async (event, params) => {
   try {
-    const res = await axios.post('http://localhost:5000/plot', params, {
+    const res = await axios.post(`${host}/plot`, params, {
       timeout: 30000
     });
     return res.data;
@@ -178,7 +179,7 @@ ipcMain.handle('plot', async (event, params) => {
 // Verificar estado del servidor backend
 ipcMain.handle('check-server', async () => {
   try {
-    const res = await axios.get('http://localhost:5000/health', { timeout: 5000 });
+    const res = await axios.get(`${host}/health`, { timeout: 5000 });
     return { status: 'connected', data: res.data };
   } catch (error) {
     return { status: 'disconnected', error: error.message };
