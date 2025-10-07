@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 
 # --- main.py inicializa la app FastAPI y monta las rutas ---
@@ -8,21 +7,9 @@ from routes import router
 app = FastAPI(title="Chambeador", description="Servidor de análisis multivariable")
 app.include_router(router)
 
-if __name__ == "__main__":
-    import uvicorn
-=======
-from flask import Flask, jsonify
-from flask import render_template_string
-from routes import register_routes
-
-
-app = Flask(__name__)
-register_routes(app)
-
-# Pantalla de bienvenida en la raíz
 @app.route('/')
 def welcome():
-    return render_template_string('''
+    return ('''
         <html>
         <head>
             <title>API Multiversal</title>
@@ -47,8 +34,8 @@ def welcome():
         </html>
     ''')
 
-if __name__ == '__main__':
->>>>>>> 65946ef8fb08c83589e4afa44fe48ab3e87fbca1
+if __name__ == "__main__":
+    import uvicorn
     print("🚀 Iniciando servidor Chambeador...")
     print("📊 Servidor de análisis multivariable")
     print("🌐 URL: http://localhost:8000")
