@@ -2,45 +2,322 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chambeador - Análisis Multivariable</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    .container { max-width: 900px; margin: auto; }
-    .section { margin-bottom: 30px; }
-    label { display: block; margin-bottom: 5px; }
-    select, input[type="text"] { width: 100%; margin-bottom: 10px; }
-    button { padding: 10px 20px; margin-top: 10px; }
-    img { max-width: 100%; margin-top: 20px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 30px;
+    }
+
+    .section {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #4a90e2;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: linear-gradient(135deg, #4a90e2, #357abd);
+      border-radius: 2px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      background: white;
+    }
+
+    select:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 140px;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #28a745 0%, #20923a 100%);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    .columns-display {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      border-left: 4px solid #4a90e2;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .result-container {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-left: 4px solid #28a745;
+    }
+
+    .error {
+      border-left-color: #dc3545;
+      background: #fff5f5;
+      color: #721c24;
+    }
+
+    .chart-section {
+      grid-column: 1 / -1;
+    }
+
+    .chart-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .chart-container img {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ffffff40;
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Chambeador - Análisis Multivariable</h1>
-    <div class="section">
-      <button id="importBtn">Importar datos</button>
-      <div id="columns"></div>
+    <div class="header">
+      <h1>📊 Chambeador</h1>
+      <p>Análisis Multivariable Avanzado</p>
     </div>
-    <div class="section">
-      <label for="dependent">Variable dependiente:</label>
-      <select id="dependent"></select>
-      <label for="independent">Variables independientes (separadas por coma):</label>
-      <input type="text" id="independent" placeholder="Ejemplo: edad,ingresos,experiencia">
-      <label for="modelType">Tipo de modelo:</label>
-      <select id="modelType">
-        <option value="regresion_multiple">Regresión múltiple</option>
-        <option value="regresion_logistica">Regresión logística</option>
-        <option value="discriminante">Análisis discriminante</option>
-      </select>
-      <button id="runModelBtn">Ejecutar modelo</button>
-      <div id="modelResult"></div>
-    </div>
-    <div class="section">
-      <label for="plotX">Gráfico X:</label>
-      <select id="plotX"></select>
-      <label for="plotY">Gráfico Y:</label>
-      <select id="plotY"></select>
-      <button id="plotBtn">Generar gráfico</button>
-      <img id="plotImg" src="" alt="Gráfico" />
+    
+    <div class="main-content">
+      <!-- Sección de importación de datos -->
+      <div class="section">
+        <h2 class="section-title">📁 Importar Datos</h2>
+        <div class="form-group">
+          <button id="importBtn" class="btn">
+            <span>📂</span> Seleccionar archivo
+          </button>
+          <div id="columns" class="columns-display" style="display: none;"></div>
+        </div>
+      </div>
+
+      <!-- Sección de análisis -->
+      <div class="section">
+        <h2 class="section-title">🔬 Configurar Análisis</h2>
+        <div class="form-group">
+          <label for="dependent">Variable dependiente:</label>
+          <select id="dependent">
+            <option value="">Selecciona una variable...</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="independent">Variables independientes:</label>
+          <input type="text" id="independent" placeholder="Ejemplo: edad,ingresos,experiencia">
+          <small style="color: #666; font-size: 0.85rem;">Separadas por comas</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="modelType">Tipo de modelo:</label>
+          <select id="modelType">
+            <option value="regresion_multiple">📈 Regresión múltiple</option>
+            <option value="regresion_logistica">📊 Regresión logística</option>
+            <option value="discriminante">🎯 Análisis discriminante</option>
+          </select>
+        </div>
+        
+        <button id="runModelBtn" class="btn btn-primary">
+          <span>🚀</span> Ejecutar modelo
+        </button>
+        
+        <div id="modelResult" style="display: none;"></div>
+      </div>
+
+      <!-- Sección de gráficos -->
+      <div class="section chart-section">
+        <h2 class="section-title">📈 Visualización</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="plotX">Variable X:</label>
+            <select id="plotX">
+              <option value="">Selecciona variable X...</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="plotY">Variable Y:</label>
+            <select id="plotY">
+              <option value="">Selecciona variable Y...</option>
+            </select>
+          </div>
+        </div>
+        
+        <button id="plotBtn" class="btn">
+          <span>📊</span> Generar gráfico
+        </button>
+        
+        <div class="chart-container">
+          <img id="plotImg" src="" alt="Gráfico" style="display: none;" />
+        </div>
+      </div>
     </div>
   </div>
   <script>
@@ -57,37 +334,327 @@
     const plotImg = document.getElementById('plotImg');
 
     let columns = [];
+    let isProcessing = false;
 
-    importBtn.onclick = async () => {
-      const res = await window.api.importFile();
-      if (!res) return;
-      columns = res.columns;
-      columnsDiv.innerText = 'Columnas: ' + columns.join(', ');
-      dependentSelect.innerHTML = columns.map(c => `<option value="${c}">${c}</option>`).join('');
-      plotXSelect.innerHTML = plotYSelect.innerHTML = dependentSelect.innerHTML;
-      plotYSelect.innerHTML = columns.map(c => `<option value="${c}">${c}</option>`).join('');
-    };
-
-    runModelBtn.onclick = async () => {
-      const dep = dependentSelect.value;
-      const indep = independentInput.value.split(',').map(s => s.trim()).filter(Boolean);
-      const type = modelTypeSelect.value;
-      const res = await window.api.runModel({ dependent: dep, independent: indep, type });
-      if (res.error) {
-        modelResultDiv.innerText = 'Error: ' + res.error;
+    // Función para mostrar loading
+    function setLoading(button, isLoading) {
+      if (isLoading) {
+        button.disabled = true;
+        const originalText = button.innerHTML;
+        button.setAttribute('data-original', originalText);
+        button.innerHTML = '<span class="loading"></span> Procesando...';
       } else {
-        modelResultDiv.innerHTML = `<b>Score:</b> ${res.score}<br><b>Coeficientes:</b> ${res.coef.join(', ')}`;
+        button.disabled = false;
+        button.innerHTML = button.getAttribute('data-original') || button.innerHTML;
+      }
+    }
+
+    // Función para mostrar notificaciones
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        animation: slideIn 0.3s ease;
+      `;
+      
+      const colors = {
+        success: '#28a745',
+        error: '#dc3545',
+        info: '#4a90e2',
+        warning: '#ffc107'
+      };
+      
+      notification.style.background = colors[type] || colors.info;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Agregar estilos para animaciones
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Importar archivo
+    importBtn.onclick = async () => {
+      if (isProcessing) return;
+      
+      setLoading(importBtn, true);
+      isProcessing = true;
+      
+      try {
+        const res = await window.api.importFile();
+        if (!res) {
+          showNotification('Importación cancelada', 'info');
+          return;
+        }
+        
+        columns = res.columns;
+        columnsDiv.innerHTML = `<strong>Columnas encontradas:</strong><br>${columns.join(', ')}`;
+        columnsDiv.style.display = 'block';
+        
+        // Actualizar selectores
+        const defaultOption = '<option value="">Selecciona una variable...</option>';
+        dependentSelect.innerHTML = defaultOption + columns.map(c => `<option value="${c}">${c}</option>`).join('');
+        plotXSelect.innerHTML = defaultOption + columns.map(c => `<option value="${c}">${c}</option>`).join('');
+        plotYSelect.innerHTML = defaultOption + columns.map(c => `<option value="${c}">${c}</option>`).join('');
+        
+        showNotification(`✅ Archivo importado exitosamente. ${columns.length} columnas encontradas.`, 'success');
+      } catch (error) {
+        showNotification('❌ Error al importar el archivo: ' + error.message, 'error');
+      } finally {
+        setLoading(importBtn, false);
+        isProcessing = false;
       }
     };
 
+    // Ejecutar modelo
+    runModelBtn.onclick = async () => {
+      if (isProcessing) return;
+      
+      const dep = dependentSelect.value;
+      const indepText = independentInput.value.trim();
+      
+      if (!dep) {
+        showNotification('❌ Selecciona una variable dependiente', 'error');
+        return;
+      }
+      
+      if (!indepText) {
+        showNotification('❌ Ingresa al menos una variable independiente', 'error');
+        return;
+      }
+      
+      const indep = indepText.split(',').map(s => s.trim()).filter(Boolean);
+      const type = modelTypeSelect.value;
+      
+      setLoading(runModelBtn, true);
+      isProcessing = true;
+      
+      try {
+        const res = await window.api.runModel({ dependent: dep, independent: indep, type });
+        let procesoHtml = '';
+        if (res.proceso && Array.isArray(res.proceso)) {
+          procesoHtml = `<div style='margin-top:18px;'><strong>📝 Proceso del análisis:</strong><ol style='margin-left:20px;'>${res.proceso.map(p => `<li>${p}</li>`).join('')}</ol></div>`;
+        }
+        if (res.error) {
+          modelResultDiv.innerHTML = `<div class="result-container error">
+            <strong>❌ Error:</strong> ${res.error}
+            ${procesoHtml}
+          </div>`;
+          showNotification('❌ Error en el análisis', 'error');
+        } else {
+          modelResultDiv.innerHTML = `<div class="result-container">
+            <h3>📊 Resultados del Análisis</h3>
+            <p><strong>Puntuación del modelo:</strong> ${(res.score * 100).toFixed(2)}%</p>
+            <p><strong>Coeficientes:</strong></p>
+            <ul style="margin-left: 20px;">
+              ${res.coef.map((coef, i) => `<li>${indep[i] || 'Variable ' + (i+1)}: ${coef.toFixed(4)}</li>`).join('')}
+            </ul>
+            ${procesoHtml}
+          </div>`;
+          showNotification('✅ Análisis completado exitosamente', 'success');
+        }
+        modelResultDiv.style.display = 'block';
+      } catch (error) {
+        modelResultDiv.innerHTML = `<div class="result-container error">
+          <strong>❌ Error:</strong> ${error.message}
+        </div>`;
+        modelResultDiv.style.display = 'block';
+        showNotification('❌ Error al ejecutar el modelo', 'error');
+      } finally {
+        setLoading(runModelBtn, false);
+        isProcessing = false;
+      }
+    };
+
+    // Generar gráfico
     plotBtn.onclick = async () => {
+      if (isProcessing) return;
+      
       const x = plotXSelect.value;
       const y = plotYSelect.value;
-      const res = await window.api.plot({ x, y });
-      if (res.image) {
-        plotImg.src = 'data:image/png;base64,' + res.image;
+      
+      if (!x || !y) {
+        showNotification('❌ Selecciona ambas variables para el gráfico', 'error');
+        return;
+      }
+      
+      if (x === y) {
+        showNotification('❌ Las variables X e Y deben ser diferentes', 'warning');
+        return;
+      }
+      
+      setLoading(plotBtn, true);
+      isProcessing = true;
+      
+      try {
+        const res = await window.api.plot({ x, y });
+        const chartContainer = document.querySelector('.chart-container');
+        // Limpiar gráficos anteriores
+        chartContainer.innerHTML = '';
+        if (res.html) {
+          // Crear un blob con el HTML y mostrarlo en un iframe
+          const blob = new Blob([res.html], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          const iframe = document.createElement('iframe');
+          iframe.src = url;
+          iframe.width = '100%';
+          iframe.height = '500';
+          iframe.style.border = 'none';
+          iframe.style.borderRadius = '10px';
+          iframe.allow = 'fullscreen';
+          chartContainer.appendChild(iframe);
+          showNotification('✅ Gráfico generado exitosamente', 'success');
+        } else if (res.error) {
+          showNotification('❌ ' + res.error, 'error');
+        } else {
+          showNotification('❌ No se pudo generar el gráfico', 'error');
+        }
+      } catch (error) {
+        showNotification('❌ Error al generar el gráfico: ' + error.message, 'error');
+      } finally {
+        setLoading(plotBtn, false);
+        isProcessing = false;
       }
     };
+
+    // Escuchar eventos del menú
+    if (window.api.onMenuImportFile) {
+      window.api.onMenuImportFile(() => {
+        importBtn.click();
+      });
+    }
+
+    // Validación en tiempo real para variables independientes
+    independentInput.addEventListener('input', function() {
+      const value = this.value.trim();
+      if (value && columns.length > 0) {
+        const vars = value.split(',').map(s => s.trim()).filter(Boolean);
+        const invalidVars = vars.filter(v => !columns.includes(v));
+        
+        if (invalidVars.length > 0) {
+          this.style.borderColor = '#dc3545';
+          this.title = `Variables no encontradas: ${invalidVars.join(', ')}`;
+        } else {
+          this.style.borderColor = '#28a745';
+          this.title = '';
+        }
+      } else {
+        this.style.borderColor = '#e1e5e9';
+        this.title = '';
+      }
+    });
+    
+    // Verificar estado del servidor al cargar
+    async function checkServerStatus() {
+      try {
+        const result = await window.api.checkServer();
+        if (result.status === 'connected') {
+          showNotification('✅ Conectado al servidor backend', 'success');
+        } else {
+          showNotification('⚠️ Servidor backend no disponible. Inicia el servidor Python.', 'warning');
+        }
+      } catch (error) {
+        showNotification('❌ No se pudo verificar el servidor backend', 'error');
+      }
+    }
+
+    // Función para crear indicador de estado del servidor
+    function createServerStatusIndicator() {
+      const indicator = document.createElement('div');
+      indicator.id = 'server-status';
+      indicator.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: #dc3545;
+        color: white;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      `;
+      indicator.textContent = '🔴 Servidor desconectado';
+      document.body.appendChild(indicator);
+      return indicator;
+    }
+
+    // Actualizar indicador de estado
+    async function updateServerStatus() {
+      let indicator = document.getElementById('server-status');
+      if (!indicator) {
+        indicator = createServerStatusIndicator();
+      }
+
+      try {
+        const result = await window.api.checkServer();
+        if (result.status === 'connected') {
+          indicator.style.background = '#28a745';
+          indicator.textContent = '🟢 Servidor conectado';
+        } else {
+          indicator.style.background = '#dc3545';
+          indicator.textContent = '🔴 Servidor desconectado';
+        }
+      } catch (error) {
+        indicator.style.background = '#dc3545';
+        indicator.textContent = '🔴 Error de conexión';
+      }
+    }
+
+    // Mensaje de bienvenida y verificación inicial
+    document.addEventListener('DOMContentLoaded', async () => {
+      showNotification('👋 ¡Bienvenido a Chambeador! Comienza importando tus datos.', 'info');
+      
+      // Verificar servidor después de un momento
+      setTimeout(async () => {
+        await updateServerStatus();
+        // Verificar cada 30 segundos
+        setInterval(updateServerStatus, 30000);
+      }, 2000);
+    });
+
+    // Atajos de teclado
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key) {
+          case 'o':
+            e.preventDefault();
+            importBtn.click();
+            break;
+          case 'Enter':
+            if (e.shiftKey) {
+              e.preventDefault();
+              runModelBtn.click();
+            }
+            break;
+        }
+      }
+    });
   </script>
 </body>
 </html>
