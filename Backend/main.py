@@ -1,15 +1,14 @@
-
-
 # --- main.py inicializa la app FastAPI y monta las rutas ---
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from routes import router
 
 app = FastAPI(title="Chambeador", description="Servidor de análisis multivariable")
 app.include_router(router)
 
-@app.route('/')
+@app.get("/", response_class=HTMLResponse)
 def welcome():
-    return ('''
+    return '''
         <html>
         <head>
             <title>API Multiversal</title>
@@ -32,7 +31,7 @@ def welcome():
             </div>
         </body>
         </html>
-    ''')
+    '''
 
 if __name__ == "__main__":
     import uvicorn
