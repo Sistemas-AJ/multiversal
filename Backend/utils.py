@@ -1,7 +1,7 @@
 
 # utils.py
 import pandas as pd
-from fastapi import UploadFile, Request
+from fastapi import UploadFile
 from fastapi.responses import JSONResponse
 
 df = None
@@ -14,10 +14,8 @@ def set_df(new_df):
     global df
     df = new_df
 
-async def import_data_logic(request: Request):
+async def import_data_logic(file: UploadFile):
     try:
-        form = await request.form()
-        file: UploadFile = form.get('file')
         if file is None or file.filename == '':
             return JSONResponse({'error': 'No se seleccionó ningún archivo'}, status_code=400)
         ext = file.filename.split('.')[-1].lower()

@@ -27,6 +27,8 @@ def welcome():
                 <p>Bienvenido a la API de análisis multivariable.<br>
                 Consulta la documentación o usa los endpoints disponibles.<br><br>
                 <b>Health check:</b> <a href="/health">/health</a>
+                <b>Documentación:</b> <a href="/docs">/docs</a>
+                <b>Redoc:</b> <a href="/redoc">/redoc</a>
                 </p>
             </div>
         </body>

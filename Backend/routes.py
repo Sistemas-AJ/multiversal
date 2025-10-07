@@ -1,7 +1,8 @@
 # routes.py
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, UploadFile, File
 from fastapi.responses import JSONResponse
 from models import run_model_logic
+from schemas import ModelRequest
 from plots import plot_logic
 from utils import import_data_logic, get_df
 
@@ -16,13 +17,15 @@ async def health_check():
     }
 
 @router.post("/import")
-async def import_data(request: Request):
-    return await import_data_logic(request)
+async def import_data(file: UploadFile = File(...)):
+    return await import_data_logic(file)
 
 @router.post("/model")
-async def run_model(request: Request):
-    return await run_model_logic(request)
+async def run_model(data: ModelRequest):
+    return await run_model_logic(data)
+
+from schemas import PlotRequest
 
 @router.post("/plot")
-async def plot(request: Request):
-    return await plot_logic(request)
+async def plot(data: PlotRequest):
+    return await plot_logic(data)

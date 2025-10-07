@@ -3,17 +3,18 @@ from fastapi.responses import JSONResponse
 import pandas as pd
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+
+from schemas import ModelRequest
 from utils import get_df
 
-async def run_model_logic(request: Request):
+async def run_model_logic(data: 'ModelRequest'):
     df = get_df()
     try:
         if df is None:
             return JSONResponse({'error': 'Primero debe importar un archivo de datos'}, status_code=400)
-        data = await request.json()
-        dep = data['dependent']
-        indep = data['independent']
-        model_type = data['type']
+        dep = data.dependent
+        indep = data.independent
+        model_type = data.type
         proceso = []
         proceso.append(f"Archivo cargado con {len(df)} filas y {len(df.columns)} columnas.")
         proceso.append(f"Modelo seleccionado: {model_type}")

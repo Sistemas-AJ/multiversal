@@ -1,17 +1,15 @@
-from fastapi import Request
 from fastapi.responses import JSONResponse
 import pandas as pd
 import plotly.express as px
 from utils import get_df
 
-async def plot_logic(request):
+async def plot_logic(data):
     df = get_df()
     try:
         if df is None:
             return JSONResponse({'error': 'Primero debe importar un archivo de datos'}, status_code=400)
-        data = await request.json()
-        x = data['x']
-        y = data['y']
+        x = data.x
+        y = data.y
         print(f"📊 Generando gráfico: {x} vs {y}")
         if x not in df.columns or y not in df.columns:
             return JSONResponse({'error': f'Columnas no encontradas: {x}, {y}'}, status_code=400)
