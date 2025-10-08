@@ -422,6 +422,11 @@ class ChambeadorApp {
     this.elements.chartContainer.appendChild(iframe);
   }
 
+
+  
+  // Alixter vasquez
+
+
   // ==========================================
   // GESTIÓN DE VARIABLES INDEPENDIENTES
   // ==========================================
