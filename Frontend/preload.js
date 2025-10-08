@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('api', {
   importFile: () => ipcRenderer.invoke('import-file'),
   runModel: (params) => ipcRenderer.invoke('run-model', params),
   plot: (params) => ipcRenderer.invoke('plot', params),
+  plot3d: (params) => ipcRenderer.invoke('plot3d', params),
   checkServer: () => ipcRenderer.invoke('check-server'),
   
   // Eventos del menú

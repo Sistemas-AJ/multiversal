@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multilineal - Análisis Multivariable</title>
+  <title>Multimodel - Análisis Multivariable</title>
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>📊 Multilineal</h1>
+      <h1>Multimodel</h1>
       <p>Análisis Multivariable Avanzado</p>
     </div>
     
@@ -37,15 +37,33 @@
         
         <div class="form-group">
           <label for="independent">Variables independientes:</label>
-          <input type="text" id="independent" placeholder="Ejemplo: edad,ingresos,experiencia">
-          <small style="color: #666; font-size: 0.85rem;">Separadas por comas</small>
+          <div class="variable-selector">
+            <div class="selector-controls">
+              <select id="availableVars" class="var-select">
+                <option value="">Selecciona una variable...</option>
+              </select>
+              <button id="addVarBtn" class="btn btn-small" type="button">
+                <span>➕</span> Agregar
+              </button>
+              <button id="clearVarsBtn" class="btn btn-small btn-secondary" type="button">
+                <span>🗑️</span> Limpiar
+              </button>
+            </div>
+            <div id="selectedVars" class="selected-variables">
+              <div class="no-vars-message">No hay variables seleccionadas</div>
+            </div>
+          </div>
         </div>
         
         <div class="form-group">
           <label for="modelType">Tipo de modelo:</label>
           <select id="modelType">
             <option value="regresion_multiple">📈 Regresión múltiple</option>
+            <option value="random_forest_reg">🌲 Random Forest (Regresión)</option>
+            <option value="svm_reg">🎯 SVM (Regresión)</option>
             <option value="regresion_logistica">📊 Regresión logística</option>
+            <option value="random_forest_clf">🌲 Random Forest (Clasificación)</option>
+            <option value="svm_clf">🎯 SVM (Clasificación)</option>
             <option value="discriminante">🎯 Análisis discriminante</option>
           </select>
         </div>
@@ -59,25 +77,40 @@
 
       <!-- Sección de gráficos -->
       <div class="section chart-section">
-        <h2 class="section-title">📈 Visualización</h2>
+        <h2 class="section-title">Visualización para 2 factores</h2>
         <div class="form-row">
           <div class="form-group">
-            <label for="plotX">Variable X:</label>
+            <label for="plotX">Factor x1:</label>
             <select id="plotX">
-              <option value="">Selecciona variable X...</option>
+              <option value="">Selecciona Factor x1...</option>
             </select>
           </div>
           
           <div class="form-group">
-            <label for="plotY">Variable Y:</label>
+            <label for="plotY">Factor x2:</label>
             <select id="plotY">
-              <option value="">Selecciona variable Y...</option>
+              <option value="">Selecciona Factor x2...</option>
             </select>
           </div>
         </div>
         
+        
+        
+        <div class="form-row" style="margin-top: 15px;">
+          <div class="form-group">
+            <label for="plotZ">Variable Y (3D):</label>
+            <select id="plotZ">
+              <option value="">Selecciona variable Y...</option>
+            </select>
+          </div>
+        </div>
+
         <button id="plotBtn" class="btn">
-          <span>📊</span> Generar gráfico
+          <span>📊</span> Generar gráfico 2D
+        </button>
+
+        <button id="plot3DBtn" class="btn">
+          <span>📊</span> Generar gráfico 3D
         </button>
         
         <div class="chart-container">

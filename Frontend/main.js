@@ -176,6 +176,19 @@ ipcMain.handle('plot', async (event, params) => {
   }
 });
 
+// Manejo de generación de gráficos 3D
+ipcMain.handle('plot3d', async (event, params) => {
+  try {
+    const res = await axios.post(`${host}/plot3d`, params, {
+      timeout: 30000
+    });
+    return res.data;
+  } catch (error) {
+    console.error('Error generating 3D plot:', error);
+    return { error: error.response?.data?.error || error.message };
+  }
+});
+
 // Verificar estado del servidor backend
 ipcMain.handle('check-server', async () => {
   try {

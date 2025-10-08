@@ -9,3 +9,8 @@ class ModelRequest(BaseModel):
 class PlotRequest(BaseModel):
     x: str
     y: str
+
+class Plot3DRequest(BaseModel):
+    x: str
+    y: str
+    z: str

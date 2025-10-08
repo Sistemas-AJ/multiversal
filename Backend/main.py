@@ -39,8 +39,8 @@ if __name__ == "__main__":
     import uvicorn
     print("🚀 Iniciando servidor Chambeador...")
     print("📊 Servidor de análisis multivariable")
-    print("🌐 URL: http://localhost:8000")
-    print("❓ Health check: http://localhost:8000/health")
+    print("🌐 URL: http://localhost:5000")
+    print("❓ Health check: http://localhost:5000/health")
     print("⏹️  Presiona Ctrl+C para detener")
     print("-" * 50)
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=5000, reload=True)
