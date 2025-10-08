@@ -3,7 +3,7 @@ const path = require('path');
 const axios = require('axios');
 
 let mainWindow;
-let host = 'http://localhost:5000';
+let host = 'http://localhost:8080';
 
 function createWindow() {
   mainWindow = new BrowserWindow({

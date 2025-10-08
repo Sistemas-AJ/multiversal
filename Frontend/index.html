@@ -4,121 +4,117 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Multimodel - Análisis Multivariable</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
   <div class="container">
     <div class="header">
       <h1>Multimodel</h1>
-      <p>Análisis Multivariable Avanzado</p>
+      <p class="subtitle">Análisis Multivariable Avanzado</p>
     </div>
-    
+
     <div class="main-content">
-      <!-- Sección de importación de datos -->
-      <div class="section">
-        <h2 class="section-title">📁 Importar Datos</h2>
-        <div class="form-group">
-          <button id="importBtn" class="btn">
-            <span>📂</span> Seleccionar archivo
-          </button>
-          <div id="columns" class="columns-display" style="display: none;"></div>
-        </div>
-      </div>
-
-      <!-- Sección de análisis -->
-      <div class="section">
-        <h2 class="section-title">🔬 Configurar Análisis</h2>
-        <div class="form-group">
-          <label for="dependent">Variable dependiente:</label>
-          <select id="dependent">
-            <option value="">Selecciona una variable...</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label for="independent">Variables independientes:</label>
-          <div class="variable-selector">
-            <div class="selector-controls">
-              <select id="availableVars" class="var-select">
-                <option value="">Selecciona una variable...</option>
-              </select>
-              <button id="addVarBtn" class="btn btn-small" type="button">
-                <span>➕</span> Agregar
-              </button>
-              <button id="clearVarsBtn" class="btn btn-small btn-secondary" type="button">
-                <span>🗑️</span> Limpiar
-              </button>
-            </div>
-            <div id="selectedVars" class="selected-variables">
-              <div class="no-vars-message">No hay variables seleccionadas</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="modelType">Tipo de modelo:</label>
-          <select id="modelType">
-            <option value="regresion_multiple">📈 Regresión múltiple</option>
-            <option value="random_forest_reg">🌲 Random Forest (Regresión)</option>
-            <option value="svm_reg">🎯 SVM (Regresión)</option>
-            <option value="regresion_logistica">📊 Regresión logística</option>
-            <option value="random_forest_clf">🌲 Random Forest (Clasificación)</option>
-            <option value="svm_clf">🎯 SVM (Clasificación)</option>
-            <option value="discriminante">🎯 Análisis discriminante</option>
-          </select>
-        </div>
-        
-        <button id="runModelBtn" class="btn btn-primary">
-          <span>🚀</span> Ejecutar modelo
-        </button>
-        
-        <div id="modelResult" style="display: none;"></div>
-      </div>
-
-      <!-- Sección de gráficos -->
-      <div class="section chart-section">
-        <h2 class="section-title">Visualización para 2 factores</h2>
-        <div class="form-row">
+      
+      <main class="analysis-panel">
+        <div class="section">
+          <h2 class="section-title"><span class="icon-svg"> <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" stroke="#357abd" stroke-width="2"/><path d="M10 6v4l2 2" stroke="#357abd" stroke-width="2" stroke-linecap="round"/></svg></span> Configurar Análisis</h2>
+          
           <div class="form-group">
-            <label for="plotX">Factor x1:</label>
-            <select id="plotX">
-              <option value="">Selecciona Factor x1...</option>
-            </select>
+            <label for="dependent">Variable dependiente:</label>
+            <select id="dependent"><option value="">Selecciona una variable...</option></select>
           </div>
           
           <div class="form-group">
-            <label for="plotY">Factor x2:</label>
-            <select id="plotY">
-              <option value="">Selecciona Factor x2...</option>
-            </select>
+            <label for="independent">Variables independientes:</label>
+            <div class="variable-selector">
+              <div class="selector-controls">
+                <select id="availableVars" class="var-select"><option value="">Selecciona una variable...</option></select>
+                <button id="addVarBtn" class="btn btn-small" type="button">Agregar</button>
+                <button id="clearVarsBtn" class="btn btn-small btn-secondary" type="button">Limpiar</button>
+              </div>
+              <div id="selectedVars" class="selected-variables">
+                <div class="no-vars-message">No hay variables seleccionadas</div>
+              </div>
+            </div>
           </div>
-        </div>
-        
-        
-        
-        <div class="form-row" style="margin-top: 15px;">
+          
           <div class="form-group">
-            <label for="plotZ">Variable Y (3D):</label>
-            <select id="plotZ">
-              <option value="">Selecciona variable Y...</option>
+            <label for="modelType">Tipo de modelo:</label>
+            <select id="modelType">
+              <option value="regresion_multiple">Regresión múltiple</option>
+              <option value="random_forest_reg">Random Forest (Regresión)</option>
+              <option value="svm_reg">SVM (Regresión)</option>
+              <option value="regresion_logistica">Regresión logística</option>
+              <option value="random_forest_clf">Random Forest (Clasificación)</option>
+              <option value="svm_clf">SVM (Clasificación)</option>
+              <option value="discriminante">Análisis discriminante</option>
             </select>
           </div>
+          
+          <button id="runModelBtn" class="btn btn-primary">Ejecutar modelo</button>
         </div>
 
-        <button id="plotBtn" class="btn">
-          <span>📊</span> Generar gráfico 2D
-        </button>
+        <div class="section">
+          <h2 class="section-title"><span class="icon-svg"> <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="14" height="14" rx="2" stroke="#357abd" stroke-width="2"/><circle cx="10" cy="10" r="4" stroke="#20923a" stroke-width="2"/></svg></span> Visualización</h2>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="plotX">Factor x1:</label>
+              <select id="plotX"><option value="">Selecciona...</option></select>
+            </div>
+            
+            <div class="form-group">
+              <label for="plotY">Factor x2:</label>
+              <select id="plotY"><option value="">Selecciona...</option></select>
+            </div>
+            
+            <div class="form-group">
+              <label for="plotZ">Variable Y (3D):</label>
+              <select id="plotZ"><option value="">Selecciona...</option></select>
+            </div>
+          </div>
+          
+          <div class="button-group">
+            <button id="plotBtn" class="btn">Gráfico 2D</button>
+            <button id="plot3DBtn" class="btn">Gráfico 3D</button>
+          </div>
+        </div>
+      </main>
 
-        <button id="plot3DBtn" class="btn">
-          <span>📊</span> Generar gráfico 3D
-        </button>
+      <aside class="sidebar">
+        <div class="section">
+          <h2 class="section-title"><span class="icon-svg"> <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="14" height="14" rx="2" stroke="#357abd" stroke-width="2"/><path d="M10 6v6m0 0-2.5-2.5M10 12l2.5-2.5" stroke="#357abd" stroke-width="2" stroke-linecap="round"/></svg></span> Importar Datos</h2>
+          <div class="form-group">
+            <button id="importBtn" class="btn">Seleccionar archivo</button>
+            <div id="columns" class="columns-display" style="display: none;"></div>
+          </div>
+        </div>
         
-        <div class="chart-container">
-          <img id="plotImg" src="" alt="Gráfico" style="display: none;" />
+        <div class="section" id="analysisLogContainer" style="display: none;">
+          <div class="tab-nav">
+            <button class="tab-btn active" data-tab="resultadosTabContent">Resultados</button>
+            <button class="tab-btn" data-tab="procesoTabContent">Proceso</button>
+          </div>
+          <div class="tab-content-container">
+            <div id="resultadosTabContent" class="tab-content active">
+              <div class="result-item"><strong>Puntuación:</strong><span id="scoreValue" class="result-value score">--</span></div>
+              <div class="result-item"><strong>Coeficientes:</strong><ul id="coefficientsList" class="result-list"><li>No hay datos</li></ul></div>
+              <div class="result-item"><strong>Métricas:</strong><ul id="metricsList" class="result-list metrics"><li>No hay datos</li></ul></div>
+            </div>
+            <div id="procesoTabContent" class="tab-content"><ol id="processList" class="process-log"><li>Esperando...</li></ol></div>
+          </div>
         </div>
+      </aside>
+      
+      <div class="section chart-container-wrapper">
+        <h2 class="section-title">Resultados Gráficos</h2>
+        <div class="chart-container">
+          </div>
       </div>
+
     </div>
   </div>
+  <script src="index.js"></script>
 </body>
-<script src="index.js"></script>
 </html>
